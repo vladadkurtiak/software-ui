@@ -26,6 +26,10 @@ export type LoginPayload = {
   password: string;
 };
 
+export type AuthWithGooglePayload = {
+  token: string;
+};
+
 export type ApiError = {
   code: string;
   message: string;

@@ -9,9 +9,11 @@ import ValidatedField from '../../../components/validated-field';
 import SignWithGoogleButton from '../../../components/sign-with-google-button';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { passStartStep } from '../../../state/auth/slice';
+import { authWithGoogle, passStartStep } from '../../../state/auth/slice';
 import { useAppDispatch } from '../../../state';
 import FormSubmittingButton from '../../../components/form-submitting-button';
+
+import { useGoogleLogin } from '@react-oauth/google'
 
 const StartStep = () => {
   const methods = useForm<StartStepValidationPayload>({ resolver: zodResolver(startStepValidationSchema) });
@@ -28,7 +30,12 @@ const StartStep = () => {
       if (e.code == 'USER_EXISTS') methods.setError('email', { message: e.message });
     }
   };
-
+  const signUpWithGoogle = useGoogleLogin({
+    onSuccess: async (res) => {
+      await dispatch(authWithGoogle({ token: res.access_token }))
+      navigate('/auth/main')
+    },
+  })
   return (
     <FormProvider {...methods}>
       <form className="flex" onSubmit={methods.handleSubmit(passStep)}>
@@ -41,7 +48,7 @@ const StartStep = () => {
         </div>
         <div className="flex flex-col items-center w-full pt-[100px] gap-[23px] w-408]">
           <div className="font-semibold text-[32px]">Get more opportunities</div>
-          <SignWithGoogleButton text="Sign Up with Google" />
+          <SignWithGoogleButton text="Sign Up with Google" onClick={signUpWithGoogle}/>
           <div className="flex items-center gap-[14px]">
             <div className="border border-#D6DDEB border-solid w-[109px] h-[1px]"></div>
             <div className="text-[16px] text-[#bdbbbb]">Or sign up with email</div>
