@@ -5,6 +5,7 @@ import {
   LoginPayload,
   PassInfoStepPayload,
   PassStartStepPayload,
+  AuthWithGooglePayload,
   PassVerificationCodeStepPayload,
 } from './types';
 import { axiosInstance } from '../../axios-instanse';
@@ -75,6 +76,13 @@ export const login = createAsyncThunk('/auth/login', async (payload: LoginPayloa
   }
 });
 
+export const authWithGoogle = createAsyncThunk(
+  '/auth/google', 
+  async (payload: AuthWithGooglePayload) => {
+     await axiosInstance.post('auth/google', { ...payload }) 
+  }
+)
+
 const authSlice = createSlice({
   name: 'auth-slice',
   initialState,
@@ -122,6 +130,14 @@ const authSlice = createSlice({
     builder.addCase(login.rejected, (state, action) => {
       state.success = false;
       state.error = (action.payload as ApiError).message;
+    });
+
+    builder.addCase(authWithGoogle.fulfilled, (state) => {
+      state.success = true;
+      state.error = null;
+    });
+    builder.addCase(authWithGoogle.rejected, (state) => {
+      state.success = false;
     });
   },
 });
