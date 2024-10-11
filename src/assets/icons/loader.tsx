@@ -28,3 +28,4 @@ const Loader = (props: SVGProps<SVGSVGElement>) => {
 };
 
 export default Loader;
+
