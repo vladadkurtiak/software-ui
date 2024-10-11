@@ -17,7 +17,7 @@ const InfoStep = () => {
     try {
       await dispatch(passInfoStep({ ...payload })).unwrap();
 
-      navigate('/auth/main', { replace: true });
+      navigate('/auth/main/home', { replace: true });
     } catch (e: any) {
       if (e.code == 'STEP_ALREADY_PASSED' || 'VERIFICATION_CODE_MUST_BE_PROVIDED_FIRST')
         methods.setError('password', { message: e.message });
@@ -25,7 +25,7 @@ const InfoStep = () => {
   };
 
   return (
-    <FormProvider {...methods}>
+    <FormProvider { ...methods }>
       <form className="flex" onSubmit={methods.handleSubmit(passStep)}>
         <div className="hidden lg:block min-w-[600px] xl:min-w-[700px]">
           <img

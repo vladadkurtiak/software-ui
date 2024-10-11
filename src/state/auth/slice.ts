@@ -83,6 +83,12 @@ export const authWithGoogle = createAsyncThunk(
   }
 )
 
+export const getMe = createAsyncThunk('/auth/me', async () => { 
+  const response = await axiosInstance.get('auth/me') 
+    return response.data
+  }
+)
+
 const authSlice = createSlice({
   name: 'auth-slice',
   initialState,
@@ -137,6 +143,14 @@ const authSlice = createSlice({
       state.error = null;
     });
     builder.addCase(authWithGoogle.rejected, (state) => {
+      state.success = false;
+    });
+
+    builder.addCase(getMe.fulfilled, (state) => {
+      state.success = true;
+      state.error = null;
+    });
+    builder.addCase(getMe.rejected, (state) => {
       state.success = false;
     });
   },

@@ -23,7 +23,7 @@ const Login = () => {
     try {
       await dispatch(login({ ...payload })).unwrap();
 
-      navigate('/auth/main');
+      navigate('/auth/main/home');
     } catch (e: any) {
       if (e.code == 'USER_NOT_EXISTS' || 'INVALID_PASSWORD') methods.setError('password', { message: e.message });
     }
@@ -32,7 +32,7 @@ const Login = () => {
   const signInWithGoogle = useGoogleLogin({
     onSuccess: async (res) => {
       await dispatch(authWithGoogle({ token: res.access_token }))
-      navigate('/auth/main')
+      navigate('/auth/main/home')
     },
   })
 
